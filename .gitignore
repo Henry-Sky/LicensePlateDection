@@ -1,3 +1,7 @@
 cache
 output
 source
+
+yolov5/weights/best.pt
+
+crnn/expr/netCRNN_(0029).pth
