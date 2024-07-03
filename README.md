@@ -1,4 +1,4 @@
-# LicensePlateDection
+# LicensePlateDetection
 Yolov5 and CRNN
 
 ### 简介
