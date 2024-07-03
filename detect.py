@@ -15,7 +15,7 @@ yolo_detect_scrip = ['python', 'yolov5/detect.py',
                      ]
 
 crnn_detect_scrip = ['python', 'crnn/demo.py',
-                     '-m', 'crnn/expr/netCRNN_(0029).pth',
+                     '-m', 'crnn/weights/netCRNN_0.6769153225806451_acc.pth',
                      '-i', 'cache/target/text_cropped.jpg',
                      '-o', 'cache',
                      ]

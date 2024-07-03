@@ -1,8 +1,5 @@
 import io
 import os.path
-
-import cv2
-
 from detect import dect
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton, QFileDialog, QHBoxLayout
@@ -18,7 +15,7 @@ class ImageUploader(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Henry\'s LicensePlate')
-        self.setGeometry(100, 100, 1280, 800)
+        self.setGeometry(300, 100, 1280, 800)
 
         self.leftlayout = QVBoxLayout()
         self.leftlabel = QLabel('等待图片', self)

@@ -1,5 +1,5 @@
 # LicensePlateDection
-Yolov5 and RCNN
+Yolov5 and CRNN
 
 ### 简介
 
