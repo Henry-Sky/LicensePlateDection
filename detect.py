@@ -15,7 +15,7 @@ yolo_detect_scrip = ['python', 'yolov5/detect.py',
                      ]
 
 crnn_detect_scrip = ['python', 'crnn/demo.py',
-                     '-m', 'crnn/weights/netCRNN_0.6769153225806451_acc.pth',
+                     '-m', 'crnn/weights/netCRNN.pth',
                      '-i', 'cache/target/text_cropped.jpg',
                      '-o', 'cache',
                      ]
@@ -24,7 +24,7 @@ crnn_detect_scrip = ['python', 'crnn/demo.py',
 def run_script(script):
     try:
         # 使用subprocess模块执行外部Python脚本
-        result = subprocess.run(script, check=True, text=True, capture_output=True)
+        subprocess.run(script, check=True, text=True, capture_output=True)
     except subprocess.CalledProcessError as e:
         print(f"执行失败: {e}")
 
@@ -44,7 +44,6 @@ def process_yolo_result(yolo_results):
     # 读取原图像
     image = cv2.imread('cache/target/text.jpg')
     h, w = image.shape[:2]
-
     # 遍历检测结果
     for i, (class_id, center_x, center_y, width, height) in enumerate(yolo_results):
         # 转换归一化坐标到像素坐标
@@ -52,17 +51,15 @@ def process_yolo_result(yolo_results):
         y = int((center_y - height / 2) * h)
         width = int(width * w)
         height = int(height * h)
-
         # 裁剪检测框
         buffer = 6
         cropped_image = image[y - buffer:y + height + buffer, x - buffer:x + width + buffer]
-
         # 保存裁剪后的图像
         cv2.imwrite("cache/target/text_cropped.jpg", cropped_image)
         print("缓存车牌聚焦图像")
 
 
-def dect(source_img):
+def detect(source_img):
     if os.path.exists('cache'):
         shutil.rmtree('cache')
     if os.path.exists('output'):
@@ -103,10 +100,8 @@ def dect(source_img):
         print("检测车牌结果: {}".format(result))
     # 输出结果图像
     shutil.copy("cache/target/text_cropped.jpg", "output/cropped_image.jpg")
-
     image = cv2.imread("cache/target/text.jpg")
     height, width, _ = image.shape
-
     # YOLO检测框信息 (class, x_center, y_center, width, height)
     for box in yolo_result:
         class_id, x_center, y_center, box_width, box_height = box
@@ -121,17 +116,16 @@ def dect(source_img):
         x2 = int(x_center + box_width / 2)
         y2 = int(y_center + box_height / 2)
         # 绘制矩形框
-        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.rectangle(image, (x1, y1), (x2, y2), (255, 64, 0), 2)
         # 打上标签
         pil_img = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
         draw = ImageDraw.Draw(pil_img)
         font = ImageFont.truetype("simsun.ttc", 40, encoding="utf-8")
-        draw.text((x1, y1 - 40), result, (255, 0, 0), font=font)
+        draw.text((x1, y1 - 40), result, (0, 0, 0),
+                  spacing=1, stroke_width=2, stroke_fill=(255, 128, 0), font=font)
         image = cv2.cvtColor(np.array(pil_img), cv2.COLOR_RGB2BGR)
     cv2.imwrite('output/labeled_image.jpg', image)
 
 
-
-
 if __name__ == "__main__":
-    dect("source/text.jpg")
+    detect("source/text.jpg")

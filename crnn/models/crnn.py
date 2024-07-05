@@ -1,12 +1,12 @@
 import torch.nn as nn
-import params
 import torch.nn.functional as F
+
 
 class BidirectionalLSTM(nn.Module):
 
     def __init__(self, nIn, nHidden, nOut):
         super(BidirectionalLSTM, self).__init__()
-
+        # 构建长短期记忆网络（LSTM）, LSTM 是一种递归神经网络（RNN）
         self.rnn = nn.LSTM(nIn, nHidden, bidirectional=True)
         self.embedding = nn.Linear(nHidden * 2, nOut)
 
@@ -66,7 +66,6 @@ class CRNN(nn.Module):
             BidirectionalLSTM(512, nh, nh),
             BidirectionalLSTM(nh, nh, nclass))
 
-
     def forward(self, input):
         # conv features
         conv = self.cnn(input)
@@ -77,14 +76,12 @@ class CRNN(nn.Module):
 
         # rnn features
         output = self.rnn(conv)
-        
+
         # add log_softmax to converge output
         output = F.log_softmax(output, dim=2)
 
         return output
 
-
     def backward_hook(self, module, grad_input, grad_output):
         for g in grad_input:
-            g[g != g] = 0   # replace all nan/inf in gradients to zero
-
+            g[g != g] = 0  # replace all nan/inf in gradients to zero

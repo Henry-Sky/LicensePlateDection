@@ -1,16 +1,15 @@
 import io
 import os.path
-from detect import dect
+from detect import detect
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton, QFileDialog, QHBoxLayout
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 from PIL import Image
 
 
 class ImageUploader(QWidget):
     def __init__(self):
         super().__init__()
-
         self.initUI()
 
     def initUI(self):
@@ -74,13 +73,12 @@ class ImageUploader(QWidget):
         self.leftlabel.adjustSize()
 
     def image_dection(self):
-        dect("source/text.jpg")
+        detect("source/text.jpg")
         if os.path.exists("output/labeled_image.jpg"):
             out = self.img2pix(Image.open("output/labeled_image.jpg"))
             self.rightlabel.setPixmap(out)
         else:
             self.rightlabel.setText("没有检测到车牌,\n请检查上传图片")
-
 
 
 def main():
